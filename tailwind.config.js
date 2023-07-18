@@ -2,7 +2,12 @@
 export default {
   content: ["./src/**/*.{html,js,svelte,ts}"],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        'gray': '#737373',
+        'light-gray': '#D9D9D9'
+      }
+    },
   },
   daisyui: {
     themes: [
