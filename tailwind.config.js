@@ -6,6 +6,9 @@ export default {
       colors: {
         'gray': '#737373',
         'light-gray': '#D9D9D9'
+      },
+      gridTemplateColumns: {
+        '40-auto': '40% auto'
       }
     },
   },

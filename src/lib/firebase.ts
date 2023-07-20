@@ -1,8 +1,8 @@
 import { initializeApp } from "firebase/app";
-import { getFirestore } from "firebase/firestore";
+import { getFirestore, doc, onSnapshot } from "firebase/firestore";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { getStorage } from "firebase/storage";
-import { writable } from "svelte/store";
+import { writable, derived } from "svelte/store";
 
 const firebaseConfig = {
     apiKey: "AIzaSyDVvgHjJYKqOjvon7kkprr-trDqfISQUdI",
@@ -47,3 +47,46 @@ function userStore() {
 }
   
 export const user = userStore();
+
+/**
+ * @param  {string} path document path or reference
+ * @returns a store with realtime updates on document data
+ */
+export function docStore<T>(
+    path: string,
+) {
+    let unsubscribe: () => void;
+
+    const docRef = doc(db, path);
+
+    const { subscribe } = writable<T | null>(null, (set) => {
+        unsubscribe = onSnapshot(docRef, (snapshot) => {
+        set((snapshot.data() as T) ?? null);
+        });
+
+        return () => unsubscribe();
+    });
+
+return {
+    subscribe,
+    ref: docRef,
+    id: docRef.id,
+};
+
+}
+  
+interface UserData {
+    email: string;
+    firstname: string;
+    lastname: string;
+    photoURL: string;
+    links: any[];
+}
+  
+export const userData: Readable<UserData | null> = derived(user, ($user, set) => { 
+if ($user) {
+    return docStore<UserData>(`users/${$user.uid}`).subscribe(set);
+} else {
+    set(null); 
+}
+});

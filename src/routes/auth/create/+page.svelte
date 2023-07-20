@@ -1,6 +1,7 @@
 <script lang="ts">
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth } from "$lib/firebase";
+import { query, getDocs, collection, where, addDoc } from "firebase/firestore"
+import { auth, db, user } from "$lib/firebase";
 import {
     goto,
 } from '$app/navigation';
@@ -38,20 +39,26 @@ function checkPasswordLength(){
 async function createUser(e: SubmitEvent){
     email = email.toLowerCase().trim()
 
-    createUserWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
-            // Signed up 
-            const user = userCredential.user;
-            console.log(user)
-            if(user){
-                goto('/')
-            }
-            // ...
-        })
-        .catch((err) => {
-            console.log(err.code);
-            console.log(err.message);
-        });
+    try {
+        const res = await createUserWithEmailAndPassword(auth, email, password)
+        const authUser = res.user
+        const q = query(collection(db, 'users'), where("uid", "==", authUser.uid))
+        const docs = await getDocs(q)
+
+        if(docs.docs.length === 0){
+            await addDoc(collection(db, "users"), {
+                uid: authUser.uid,
+                email: authUser.email,
+                photoURL: authUser?.photoURL ?? null
+            })
+        }
+
+        goto('/')
+    } catch (err) {
+        console.error(err)
+        alert(err.message)
+    }
+
 }
 
 </script>
