@@ -3,6 +3,7 @@ import { getFirestore, doc, onSnapshot } from "firebase/firestore";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { getStorage } from "firebase/storage";
 import { writable, derived } from "svelte/store";
+import type { Readable } from "svelte/motion";
 
 const firebaseConfig = {
     apiKey: "AIzaSyDVvgHjJYKqOjvon7kkprr-trDqfISQUdI",

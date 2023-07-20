@@ -1,16 +1,5 @@
 <script>
     import { user } from "$lib/firebase"
-    import { signOut } from "firebase/auth";
-    import { auth } from "$lib/firebase";
-
-
-    async function handleSignOut(){
-        signOut(auth).then(() => {
-            // Sign-out successful.
-        }).catch((error) => {
-        // An error happened.
-        });
-    }
 
 </script>
 
