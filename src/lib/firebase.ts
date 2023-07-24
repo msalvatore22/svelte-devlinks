@@ -16,7 +16,7 @@ const firebaseConfig = {
   };
 
 export const app = initializeApp(firebaseConfig)
-export const db = getFirestore()
+export const db = getFirestore();
 export const auth = getAuth()
 export const storage = getStorage()
 
@@ -62,17 +62,17 @@ export function docStore<T>(
 
     const { subscribe } = writable<T | null>(null, (set) => {
         unsubscribe = onSnapshot(docRef, (snapshot) => {
-        set((snapshot.data() as T) ?? null);
+            set((snapshot.data() as T) ?? null);
         });
 
         return () => unsubscribe();
     });
 
-return {
-    subscribe,
-    ref: docRef,
-    id: docRef.id,
-};
+    return {
+        subscribe,
+        ref: docRef,
+        id: docRef.id,
+    };
 
 }
   
@@ -85,9 +85,10 @@ interface UserData {
 }
   
 export const userData: Readable<UserData | null> = derived(user, ($user, set) => { 
-if ($user) {
-    return docStore<UserData>(`users/${$user.uid}`).subscribe(set);
-} else {
-    set(null); 
-}
+    if ($user) {
+        return docStore<UserData>(`users/${$user.uid}`).subscribe(set);
+    } else {
+        set(null); 
+    }
 });
+

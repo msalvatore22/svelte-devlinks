@@ -14,9 +14,9 @@ async function handleSignIn(){
         .then((userCredential) => {
             // Signed in 
             const user = userCredential.user;
-            console.log(user)
+
             if(user){
-                goto('/')
+                goto('/home/links')
             }
             // ...
         })

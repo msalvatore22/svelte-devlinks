@@ -1,6 +1,6 @@
 <script lang="ts">
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { query, getDocs, collection, where, addDoc } from "firebase/firestore"
+import { query, doc, getDocs, collection, where, writeBatch } from "firebase/firestore"
 import { auth, db, user } from "$lib/firebase";
 import {
     goto,
@@ -46,14 +46,20 @@ async function createUser(e: SubmitEvent){
         const docs = await getDocs(q)
 
         if(docs.docs.length === 0){
-            await addDoc(collection(db, "users"), {
-                uid: authUser.uid,
+            const batch = writeBatch(db);
+
+            batch.set(doc(db, "users", $user!.uid), { 
                 email: authUser.email,
-                photoURL: authUser?.photoURL ?? null
-            })
+                photoURL: authUser?.photoURL ?? null,
+                links: [],
+                firstname: '',
+                lastname: ''
+            });
+            await batch.commit()
         }
 
-        goto('/')
+        goto('/home/links')
+        
     } catch (err) {
         console.error(err)
         alert(err.message)

@@ -1,4 +1,5 @@
-<script>
+<script lang="ts">
+
     const menuItems = [
         {
             "platform": "GitHub",
@@ -72,6 +73,8 @@
         }
     ]
 
+    let selected: { platform: string, baseURL: string, iconPath: string }
+    let link: string
 
 </script>
 
@@ -80,13 +83,24 @@
         <img src="/icon-drag-and-drop.svg" alt="drag and drop icon">
         <button class="btn btn-ghost">Remove</button>
     </div>  
-    <div class="form-control w-full">
-        <span class="label-text">Platform</span>
-        <select class="select select-bordered">
+    <form class="form-control w-full">
+        <label for="platform" class="label">
+            <span class="label-text">Platform</span>
+        </label>
+        <select id="platform" bind:value={selected} class="select select-bordered">
             {#each menuItems as item }
-                <option>{item.platform}</option>
+                <option value={item}>{item.platform}</option>
             {/each}
         </select>
-      </div>
+        <label for="link" class="label">
+            <span class="label-text">Link</span>
+        </label>
+        <input 
+            id="link"
+            bind:value={link}
+            class="input input-bordered w-full"
+            placeholder={'e.g. ' + selected?.baseURL}
+        />
+    </form>
 </div>
 
