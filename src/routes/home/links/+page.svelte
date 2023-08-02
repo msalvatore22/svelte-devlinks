@@ -1,6 +1,13 @@
 <script lang="ts">
     import { user, userData } from "$lib/firebase";
     import DevLink from "$lib/components/DevLink.svelte";
+
+    let links = []
+
+    function addLink(){
+        // create a form element and add a input to array
+        links.push('hi')
+    }
     
 </script>
 
@@ -11,8 +18,7 @@
     <div class="bg-base-100 rounded-xl p-20">
         <h1 class="text-3xl font-bold">Customize your links</h1>
         <p class="text-gray mt-2">Add/edit/remove links below and then share all your profiles with the world!</p>
-        <button class="btn btn-outline btn-primary w-full mt-10">+ Add new link</button>
-
+        <button on:click={addLink} class="btn btn-outline btn-primary w-full mt-10">+ Add new link</button>
 
             <div class="flex flex-col justify-center items-center bg-neutral p-10 rounded-xl mt-8">
                 <img class='w-2/4' src="/illustration-empty.svg" alt="how to illustration">
